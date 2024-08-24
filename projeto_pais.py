@@ -401,7 +401,21 @@ def confirmar():
         if(len(erro_medio)==241):
             erro_medio.pop(0)
 
-    if capital_resposta.upper() in [local.upper() for local in respostas[pais_aleatorio][1]]:
+    capital_answer = capital_resposta.upper().replace(' E ', ', ').split(', ')
+    num_capitais = len(respostas[pais_aleatorio][1])
+    acerto_capital = 0
+    i=0
+    j=0
+    while(i<len(capital_answer)):
+        while(j<num_capitais):
+            if capital_answer[i] in [local.upper() for local in respostas[pais_aleatorio][1][j]]:
+                acerto_capital+=1
+                break
+
+            j+=1
+        j=0
+        i+=1
+    if acerto_capital == num_capitais:
 
         acerto += 1
         
@@ -433,7 +447,9 @@ def confirmar():
             erro_medio.pop(0)
 
     
-
+    string_capital = [info[0] for info in respostas[pais_aleatorio][1]]
+    string_capital = ', '.join(string_capital)
+    string_capital = string_capital[::-1].replace(", "[::-1], " e "[::-1], 1)[::-1]
     if acerto == 3:
 
         lb_correto['text']="Resposta certa!"
@@ -445,14 +461,14 @@ def confirmar():
 
     elif acerto == 0:
 
-        lb_errado['text']=f"Respostas erradas! As respostas certas são {respostas[pais_aleatorio][0][0]}, {respostas[pais_aleatorio][1][0]}, {respostas[pais_aleatorio][2][0]}."
+        lb_errado['text']=f"Respostas erradas! As respostas certas são {respostas[pais_aleatorio][0][0]}, {string_capital}, {respostas[pais_aleatorio][2][0]}."
         lb_errado.lift()
         
         pontuacao[-1]=0
 
     else:
 
-        lb_qcorreto['text']=f"Resposta quase certa! As respostas certas são {respostas[pais_aleatorio][0][0]}, {respostas[pais_aleatorio][1][0]}, {respostas[pais_aleatorio][2][0]}."
+        lb_qcorreto['text']=f"Resposta quase certa! As respostas certas são {respostas[pais_aleatorio][0][0]}, {string_capital}, {respostas[pais_aleatorio][2][0]}."
         lb_qcorreto.lift()
 
         pontuacao[-1]=0
