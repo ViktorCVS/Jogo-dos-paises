@@ -1,4 +1,4 @@
-Projeto destinado a memorizar os países, suas capitais, continentes, bandeiras e localização no mapa!
+Projeto destinado a memorizar os países, suas capitais, continentes, bandeiras e localização no mapa! Adicionalmente, há alguns territórios ultramarinos e regiões autônomas.
 
 Esse projeto usa bibliotecas python nativas e também bibliotecas que precisam ser instaladas.
 
