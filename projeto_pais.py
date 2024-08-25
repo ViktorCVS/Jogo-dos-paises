@@ -405,7 +405,9 @@ def confirmar():
     pont_media.append(0)
     erro_medio.append(1)
 
-    if pais_resposta.upper() in [local.upper() for local in respostas[pais_aleatorio][0]]:
+    pais_answer = pais_resposta.upper().strip()
+    pais_answer = " ".join(pais_answer.split())
+    if pais_answer in [local.upper() for local in respostas[pais_aleatorio][0]]:
 
         acerto += 1
         
@@ -420,7 +422,13 @@ def confirmar():
         if(len(erro_medio)==241):
             erro_medio.pop(0)
 
-    capital_answer = capital_resposta.upper().replace(' E ', ', ').split(', ')
+    capital_answer = capital_resposta.upper().strip().replace(' E ', ',').split(',')
+    print(capital_answer)
+    capital_answer = [capital.strip() for capital in capital_answer]
+    print(capital_answer)
+    capital_answer = [" ".join(capital.split()) for capital in capital_answer]
+    print(capital_answer)
+    print()
     num_capitais = len(respostas[pais_aleatorio][1])
     acerto_capital = 0
     i=0
@@ -449,8 +457,9 @@ def confirmar():
         if(len(erro_medio)==241):
             erro_medio.pop(0)
 
-
-    if continente_resposta.upper() in [local.upper() for local in respostas[pais_aleatorio][2]]:
+    continente_answer = continente_resposta.upper().strip()
+    continente_answer = " ".join(continente_answer.split())
+    if continente_answer in [local.upper() for local in respostas[pais_aleatorio][2]]:
 
         acerto += 1
         
