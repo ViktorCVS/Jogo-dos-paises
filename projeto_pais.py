@@ -37,7 +37,7 @@ try:
     with open('pref.pkl', 'rb') as f:
         pref=pickle.load(f)
 except:
-    pref = [1,1,0,0,'Bandeira e Local','Aleatório']
+    pref = [[1,1,0,0,'Bandeira e Local','Aleatório'],[0,1,1,1,1,1,1,1]]
     with open('pref.pkl', 'wb') as f:
         pickle.dump(pref,f)
 
@@ -45,7 +45,8 @@ pont_media = []
 erro_medio = []
 
 def on_config_change(*args):
-    pref = [var_independente.get(),var_fantasmas.get(),var_salvar.get(),var_embar.get(),cbb_modo.get(),cbb_tipo.get()]
+    pref = [[var_independente.get(),var_fantasmas.get(),var_salvar.get(),var_embar.get(),cbb_modo.get(),cbb_tipo.get()],
+            [var_brasil.get(),var_am_sul.get(),var_am_central.get(),var_am_norte.get(),var_africa.get(),var_europa.get(),var_oceania.get(),var_asia.get()]]
     with open('pref.pkl', 'wb') as f:
         pickle.dump(pref,f)
 
@@ -65,23 +66,27 @@ def informa():
     top.resizable(False,False)
 
     lb_informacao_1 = Label(top, text='\n* Use a acentuação e pontuação correta!')
-    lb_informacao_1.place(x=10,y=10)
+    lb_informacao_1.place(x=10,y=5)
     lb_informacao_2 = Label(top, text='\n* O nome dos países sempre em português!')
-    lb_informacao_2.place(x=10,y=50)
-    lb_informacao_3 = Label(top, text='\n* Capitais podem ser escritas tanto em português\n quanto na língua local!',justify="left")
-    lb_informacao_3.place(x=10,y=90)
+    lb_informacao_2.place(x=10,y=45)
+    lb_informacao_3 = Label(top, text='\n* Capitais podem ser escritas tanto em português\n quanto na língua local! Separadas por "e" ou ","!',justify="left")
+    lb_informacao_3.place(x=10,y=85)
     lb_informacao_4 = Label(top, text='\n* As respostas podem ser escritas maiúsculas,\n minúsculas ou de forma mista!',justify="left")
-    lb_informacao_4.place(x=10,y=150)
+    lb_informacao_4.place(x=10,y=140)
     lb_informacao_4 = Label(top, text='\n* Países declarados independentes estão ativados\n por definição, podendo ser desativados em\n configurações!',justify="left")
-    lb_informacao_4.place(x=10,y=200)
+    lb_informacao_4.place(x=10,y=190)
     lb_informacao_5 = Label(top, text='\n* Palestina Livre!',justify="left")
-    lb_informacao_5.place(x=10,y=270)
+    lb_informacao_5.place(x=10,y=260)
     
 
-binario = 0
+
+
 def marcar_tudo():
 
-    global binario
+    if var_brasil.get()==1 or var_am_sul.get()==1 or var_am_central.get()==1 or var_am_norte.get()==1 or var_africa.get()==1 or var_europa.get()==1 or var_oceania.get()==1 or var_asia.get()==1:
+        binario = 0
+    elif var_brasil.get()==0 and var_am_sul.get()==0 and var_am_central.get()==0 and var_am_norte.get()==0 and var_africa.get()==0 and var_europa.get()==0 and var_oceania.get()==0 and var_asia.get()==0:
+        binario = 1
 
     if binario > 1:
 
@@ -549,36 +554,53 @@ var_asia=IntVar()
 
 cb_brasil = Checkbutton(tab_menu, text='Brasil',variable=var_brasil)
 cb_brasil.place(relx=0.5,x=-40,y=100+50)
+if pref[1][0] == 1:
+    cb_brasil.select()
+var_brasil.trace('w',on_config_change)
 
 cb_am_sul = Checkbutton(tab_menu, text='América do Sul',variable=var_am_sul)
 cb_am_sul.place(relx=0.5,x=-40,y=120+50)
-cb_am_sul.select()
+if pref[1][1] == 1:
+    cb_am_sul.select()
+var_am_sul.trace('w',on_config_change)
 
 cb_am_central = Checkbutton(tab_menu, text='América Central',variable=var_am_central)
 cb_am_central.place(relx=0.5,x=-40,y=140+50)
-cb_am_central.select()
+if pref[1][2] == 1:
+    cb_am_central.select()
+var_am_central.trace('w',on_config_change)
 
 cb_am_norte = Checkbutton(tab_menu, text='América do Norte',variable=var_am_norte)
 cb_am_norte.place(relx=0.5,x=-40,y=160+50)
-cb_am_norte.select()
+if pref[1][3] == 1:
+    cb_am_norte.select()
+var_am_norte.trace('w',on_config_change)
 
 cb_africa = Checkbutton(tab_menu, text='África',variable=var_africa)
 cb_africa.place(relx=0.5,x=-40,y=180+50)
-cb_africa.select()
+if pref[1][4] == 1:
+    cb_africa.select()
+var_africa.trace('w',on_config_change)
 
 cb_europa = Checkbutton(tab_menu, text='Europa',variable=var_europa)
 cb_europa.place(relx=0.5,x=-40,y=200+50)
-cb_europa.select()
+if pref[1][5] == 1:
+    cb_europa.select()
+var_europa.trace('w',on_config_change)
 
 cb_oceania = Checkbutton(tab_menu, text='Oceania',variable=var_oceania)
 cb_oceania.place(relx=0.5,x=-40,y=220+50)
-cb_oceania.select()
+if pref[1][6] == 1:
+    cb_oceania.select()
+var_oceania.trace('w',on_config_change)
 
 cb_asia = Checkbutton(tab_menu, text='Ásia',variable=var_asia)
 cb_asia.place(relx=0.5,x=-40,y=240+50)
-cb_asia.select()
+if pref[1][7] == 1:
+    cb_asia.select()
+var_asia.trace('w',on_config_change)
 
-lb_versao = Label(tab_menu, text="V1.7b.nb")
+lb_versao = Label(tab_menu, text="V1.75")
 lb_versao.place(rely=1,x=1,y=-20)
 
 
@@ -625,36 +647,36 @@ b_menu_config = Button(tab_configuracao,width=20,text="Menu",command=muda_menu)
 var_independente=IntVar()
 cb_independente = Checkbutton(tab_configuracao, text='Habilitar países declarados independentes',variable=var_independente)
 cb_independente.place(relx=0.5,x=-120,y=2*pos)
-if pref[0] == 1:
+if pref[0][0] == 1:
     cb_independente.select()
 var_independente.trace('w',on_config_change)
 
 var_fantasmas=IntVar()
 cb_fantasma = Checkbutton(tab_configuracao, text='Habilitar países extintos',variable=var_fantasmas)
 cb_fantasma.place(relx=0.5,x=-120,y=3*pos)
-if pref[1] == 1:
+if pref[0][1] == 1:
     cb_fantasma.select()
 var_fantasmas.trace('w',on_config_change)
 
 var_salvar=IntVar()
 cb_salvar = Checkbutton(tab_configuracao, text='Salvar no modo sequencial',variable=var_salvar)
 cb_salvar.place(relx=0.5,x=-120,y=4*pos)
-if pref[2] == 1:
+if pref[0][2] == 1:
     cb_salvar.select()
 var_salvar.trace('w',on_config_change)
 
 var_embar=IntVar()
 cb_embar = Checkbutton(tab_configuracao, text='Embaralhar o modo sequencial',variable=var_embar)
 cb_embar.place(relx=0.5,x=-120,y=5*pos)
-if pref[3] == 1:
+if pref[0][3] == 1:
     cb_embar.select()
 var_embar.trace('w',on_config_change)
 
 cbb_modo = ttk.Combobox(tab_configuracao, values=["Bandeira e Local", "Bandeira apenas", "Local apenas"])
 cbb_modo.place(relx=0.5,x=-115,y=6*pos)
-if pref[4] == 'Bandeira e Local':
+if pref[0][4] == 'Bandeira e Local':
     cbb_modo.current(0)
-elif pref[4] == 'Bandeira apenas':
+elif pref[0][4] == 'Bandeira apenas':
     cbb_modo.current(1)
 else:
     cbb_modo.current(2)
@@ -665,7 +687,7 @@ lb_configuracao.place(relx=0.5,x=35,y=6*pos-2)
 
 cbb_tipo = ttk.Combobox(tab_configuracao, values=["Aleatório", "Sequencial"])
 cbb_tipo.place(relx=0.5,x=-115,y=7*pos)
-if pref[5] == 'Aleatório':
+if pref[0][5] == 'Aleatório':
     cbb_tipo.current(0)
 else:
     cbb_tipo.current(1)

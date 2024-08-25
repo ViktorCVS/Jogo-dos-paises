@@ -113,7 +113,7 @@ respostas_af = {'África do Sul':[['África do Sul'],[['Pretória'],['Cidade do 
                 'Gana':[['Gana'],[['Acra','Accra']],['África']],
                 'Guiné':[['Guiné'],[['Conacri','Conakry']],['África']],
                 'Guiné-Bissau':[['Guiné-Bissau'],[['Bissau']],['África']],
-                'Guiné Equatorial':[['Guiné Equatorial'],[['Malabo/Cidade da Paz','Malabo/Ciudad de la Paz','Malabo/Ville de Paix']],['África']], ***************
+                'Guiné Equatorial':[['Guiné Equatorial'],[['Malabo'],['Cidade da Paz','Ciudad de la Paz','Ville de Paix']],['África']],
                 'Libéria':[['Libéria'],[['Monróvia','Monrovia']],['África']],
                 'Mali':[['Mali','Máli'],[['Bamaco','Bamako']],['África']],
                 'Mauritânia':[['Mauritânia'],[['Nuaquexote','Nuaquechote','Nouakchott']],['África']],
