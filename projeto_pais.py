@@ -19,6 +19,7 @@ control_2 = 0
 gerador = np.random.default_rng()
 
 status_seq = True
+#change_region = False
 
 rL = {'Brasil':27,'as':13,'ac':23,'an':4,'af':56,'eu':60,'oc':18,'aa':54}
 
@@ -50,6 +51,18 @@ def on_config_change(*args):
     with open('pref.pkl', 'wb') as f:
         pickle.dump(pref,f)
 
+def on_menu_change(*args):
+    global status_seq
+    global control
+    global control_2
+    status_seq = True
+    control = 0
+    control_2 = 0
+    pref = [[var_independente.get(),var_fantasmas.get(),var_salvar.get(),var_embar.get(),cbb_modo.get(),cbb_tipo.get()],
+            [var_brasil.get(),var_am_sul.get(),var_am_central.get(),var_am_norte.get(),var_africa.get(),var_europa.get(),var_oceania.get(),var_asia.get()]]
+    with open('pref.pkl', 'wb') as f:
+        pickle.dump(pref,f)
+
 def ciclo():
 
     pais_aleatorio_f()
@@ -65,18 +78,18 @@ def informa():
     top.attributes('-topmost', 'true')
     top.resizable(False,False)
 
-    lb_informacao_1 = Label(top, text='\n* Use a acentuação e pontuação correta!')
+    lb_informacao_1 = Label(top, text='\n* Use a acentuação e pontuação correta! O nome\ndos países sempre em português!',justify="left")
     lb_informacao_1.place(x=10,y=5)
-    lb_informacao_2 = Label(top, text='\n* O nome dos países sempre em português!')
-    lb_informacao_2.place(x=10,y=45)
+    lb_informacao_2 = Label(top, text='\n* Mudar a região no modo sequencial vai zerar o\nseu progresso!',justify="left")
+    lb_informacao_2.place(x=10,y=55)
     lb_informacao_3 = Label(top, text='\n* Capitais podem ser escritas tanto em português\n quanto na língua local! Separadas por "e" ou ","!',justify="left")
-    lb_informacao_3.place(x=10,y=85)
+    lb_informacao_3.place(x=10,y=105)
     lb_informacao_4 = Label(top, text='\n* As respostas podem ser escritas maiúsculas,\n minúsculas ou de forma mista!',justify="left")
-    lb_informacao_4.place(x=10,y=140)
+    lb_informacao_4.place(x=10,y=155)
     lb_informacao_4 = Label(top, text='\n* Países declarados independentes estão ativados\n por definição, podendo ser desativados em\n configurações!',justify="left")
-    lb_informacao_4.place(x=10,y=190)
+    lb_informacao_4.place(x=10,y=205)
     lb_informacao_5 = Label(top, text='\n* Palestina Livre!',justify="left")
-    lb_informacao_5.place(x=10,y=260)
+    lb_informacao_5.place(x=10,y=270)
     
 
 
@@ -191,6 +204,7 @@ status = 0
 def pais_aleatorio_f():
 
     global status_seq
+    #global change_region
 
     global status
 
@@ -556,49 +570,49 @@ cb_brasil = Checkbutton(tab_menu, text='Brasil',variable=var_brasil)
 cb_brasil.place(relx=0.5,x=-40,y=100+50)
 if pref[1][0] == 1:
     cb_brasil.select()
-var_brasil.trace('w',on_config_change)
+var_brasil.trace('w',on_menu_change)
 
 cb_am_sul = Checkbutton(tab_menu, text='América do Sul',variable=var_am_sul)
 cb_am_sul.place(relx=0.5,x=-40,y=120+50)
 if pref[1][1] == 1:
     cb_am_sul.select()
-var_am_sul.trace('w',on_config_change)
+var_am_sul.trace('w',on_menu_change)
 
 cb_am_central = Checkbutton(tab_menu, text='América Central',variable=var_am_central)
 cb_am_central.place(relx=0.5,x=-40,y=140+50)
 if pref[1][2] == 1:
     cb_am_central.select()
-var_am_central.trace('w',on_config_change)
+var_am_central.trace('w',on_menu_change)
 
 cb_am_norte = Checkbutton(tab_menu, text='América do Norte',variable=var_am_norte)
 cb_am_norte.place(relx=0.5,x=-40,y=160+50)
 if pref[1][3] == 1:
     cb_am_norte.select()
-var_am_norte.trace('w',on_config_change)
+var_am_norte.trace('w',on_menu_change)
 
 cb_africa = Checkbutton(tab_menu, text='África',variable=var_africa)
 cb_africa.place(relx=0.5,x=-40,y=180+50)
 if pref[1][4] == 1:
     cb_africa.select()
-var_africa.trace('w',on_config_change)
+var_africa.trace('w',on_menu_change)
 
 cb_europa = Checkbutton(tab_menu, text='Europa',variable=var_europa)
 cb_europa.place(relx=0.5,x=-40,y=200+50)
 if pref[1][5] == 1:
     cb_europa.select()
-var_europa.trace('w',on_config_change)
+var_europa.trace('w',on_menu_change)
 
 cb_oceania = Checkbutton(tab_menu, text='Oceania',variable=var_oceania)
 cb_oceania.place(relx=0.5,x=-40,y=220+50)
 if pref[1][6] == 1:
     cb_oceania.select()
-var_oceania.trace('w',on_config_change)
+var_oceania.trace('w',on_menu_change)
 
 cb_asia = Checkbutton(tab_menu, text='Ásia',variable=var_asia)
 cb_asia.place(relx=0.5,x=-40,y=240+50)
 if pref[1][7] == 1:
     cb_asia.select()
-var_asia.trace('w',on_config_change)
+var_asia.trace('w',on_menu_change)
 
 lb_versao = Label(tab_menu, text="V1.75")
 lb_versao.place(rely=1,x=1,y=-20)
@@ -742,8 +756,6 @@ def nova_pos(event):
 
         pass
 
-
-#janela.resizable(False,False)
 janela.bind("<Configure>", nova_pos)
 janela.bind('<Return>',lambda event:teclado())
 janela.mainloop()
