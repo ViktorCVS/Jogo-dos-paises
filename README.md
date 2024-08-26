@@ -2,7 +2,7 @@ Projeto destinado a memorizar os países, suas capitais, continentes, bandeiras 
 
 Esse projeto usa bibliotecas python nativas e também bibliotecas que precisam ser instaladas.
 
-Bibliotecas necessárias nativas para o jogo:
+Bibliotecas necessárias para o jogo:
 
 - [x] tkinter
 - [x] PIL
