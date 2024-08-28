@@ -5,7 +5,7 @@ Esse ramo é comparível com o sistema operacional Linux, testado para as distri
 
 - [x] Ubuntu 22.04.4 LTS (jammy)
 
-Mas provavelmente é comparível com outras versões ou mesmo outras distribuições :)
+Mas provavelmente é compatível com outras versões ou mesmo outras distribuições :)
 
 
 Esse projeto usa bibliotecas python nativas e também bibliotecas que precisam ser instaladas.
