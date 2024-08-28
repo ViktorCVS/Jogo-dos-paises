@@ -1,6 +1,7 @@
 Projeto destinado a memorizar os países, suas capitais, continentes, bandeiras e localização no mapa! Adicionalmente, há alguns territórios ultramarinos e regiões autônomas.
 
 Esse ramo é comparível com o sistema operacional Linux, testado para as distribuições:
+
 [x] Ubuntu 22.04.4 LTS (jammy)
 
 Mas provavelmente é comparível com outras versões ou mesmo outras distribuições :)
