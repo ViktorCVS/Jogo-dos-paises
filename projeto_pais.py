@@ -9,7 +9,7 @@ import pickle
 import locale
 import functools
 
-locale.setlocale(locale.LC_ALL, 'pt_BR')
+locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 diretorio = os.getcwd()
 
@@ -72,24 +72,24 @@ def ciclo():
 def informa():
 
     top = Toplevel(janela)
-    top.geometry("290x320+600+300")
+    top.geometry("325x345+600+300")
     top.title("Informações")
-    top.iconbitmap(diretorio+r'\ícone\world.ico')
+    #top.iconbitmap(diretorio+r'\ícone\world.png')
     top.attributes('-topmost', 'true')
     top.resizable(False,False)
 
-    lb_informacao_1 = Label(top, text='\n* Use a acentuação e pontuação correta! O nome\ndos países sempre em português!',justify="left")
+    lb_informacao_1 = Label(top, text='\n* Use a acentuação e pontuação correta!\nO nome dos países sempre em português!',justify="left")
     lb_informacao_1.place(x=10,y=5)
-    lb_informacao_2 = Label(top, text='\n* Mudar a região no modo sequencial vai zerar o\nseu progresso!',justify="left")
-    lb_informacao_2.place(x=10,y=55)
-    lb_informacao_3 = Label(top, text='\n* Capitais podem ser escritas tanto em português\n quanto na língua local! Separadas por "e" ou ","!',justify="left")
-    lb_informacao_3.place(x=10,y=105)
+    lb_informacao_2 = Label(top, text='\n* Mudar a região no modo sequencial vai\nzerar o seu progresso!',justify="left")
+    lb_informacao_2.place(x=10,y=60)
+    lb_informacao_3 = Label(top, text='\n* Capitais podem ser escritas tanto em por-\ntuguês quanto na língua local!\nSeparadas por "e" ou ","!',justify="left")
+    lb_informacao_3.place(x=10,y=115)
     lb_informacao_4 = Label(top, text='\n* As respostas podem ser escritas maiúsculas,\n minúsculas ou de forma mista!',justify="left")
-    lb_informacao_4.place(x=10,y=155)
-    lb_informacao_4 = Label(top, text='\n* Países declarados independentes estão ativados\n por definição, podendo ser desativados em\n configurações!',justify="left")
-    lb_informacao_4.place(x=10,y=205)
+    lb_informacao_4.place(x=10,y=170)
+    lb_informacao_4 = Label(top, text='\n* Países declarados independentes estão\nativados por definição, podendo ser desati-\nvados em configurações!',justify="left")
+    lb_informacao_4.place(x=10,y=220)
     lb_informacao_5 = Label(top, text='\n* Palestina Livre!',justify="left")
-    lb_informacao_5.place(x=10,y=270)
+    lb_informacao_5.place(x=10,y=290)
     
 
 
@@ -172,7 +172,7 @@ def muda_paises():
         top = Toplevel(janela)
         top.geometry("260x70+600+300")
         top.title("Erro de seleção")
-        top.iconbitmap(diretorio+r'\ícone\world.ico')
+        #top.iconbitmap(diretorio+r'/ícone/world.png')
         top.attributes('-topmost', 'true')
         top.resizable(False,False)
 
@@ -244,7 +244,7 @@ def pais_aleatorio_f():
 
         if var_brasil.get():
 
-            regiao.append('Brasil')
+            regiao.append('brasil')
 
         if var_am_sul.get():
 
@@ -277,7 +277,7 @@ def pais_aleatorio_f():
     if cbb_tipo.get() == 'Aleatório':
 
         regiao_aleatoria = gerador.choice(regiao)
-        paises = os.listdir(diretorio+f'\\bandeiras\\{regiao_aleatoria}')
+        paises = os.listdir(diretorio+f'/bandeiras/{regiao_aleatoria}')
 
         while(True):
             
@@ -303,14 +303,14 @@ def pais_aleatorio_f():
         if status_seq and not var_embar.get():
             
             regiao_aleatoria = regiao[control]
-            paises = os.listdir(diretorio+f'\\bandeiras\\{regiao_aleatoria}')
+            paises = os.listdir(diretorio+f'/bandeiras/{regiao_aleatoria}')
             paises = sorted(paises,key=functools.cmp_to_key(locale.strcoll))
 
         elif status_seq and var_embar.get():
 
             gerador.shuffle(regiao)
             regiao_aleatoria = regiao[control]
-            paises = os.listdir(diretorio+f'\\bandeiras\\{regiao_aleatoria}')
+            paises = os.listdir(diretorio+f'/bandeiras/{regiao_aleatoria}')
             gerador.shuffle(paises)
 
         while(True):
@@ -337,13 +337,13 @@ def pais_aleatorio_f():
             control=0
 
     status_seq = False
-    img_bandeira = Image.open(diretorio+f'\\bandeiras\\{regiao_aleatoria}\\{pais_aleatorio}')
+    img_bandeira = Image.open(diretorio+f'/bandeiras/{regiao_aleatoria}/{pais_aleatorio}')
     dim_img = list(img_bandeira.size)
     proporcao = dim_img[1]/dim_img[0]
     img_bandeira = img_bandeira.resize((280,round(280*proporcao)), Image.LANCZOS)
     img_bandeira= ImageTk.PhotoImage(img_bandeira)
     
-    img_loc = Image.open(diretorio+f'\\local\\{regiao_aleatoria}\\{pais_aleatorio}')
+    img_loc = Image.open(diretorio+f'/local/{regiao_aleatoria}/{pais_aleatorio}')
     img_loc = img_loc.resize((300,300), Image.LANCZOS)
     img_loc= ImageTk.PhotoImage(img_loc)
 
@@ -362,7 +362,7 @@ def pais_aleatorio_f():
         lb_bandeira['image']=''
         lb_loc['image']=img_loc    
 
-    if regiao_aleatoria == 'Brasil':
+    if regiao_aleatoria == 'brasil':
 
         lb_pergunta['text']="Qual é o estado, sua capital e sua região, respectivamente?"
         lb_pais['text']='Estado:'
@@ -423,12 +423,8 @@ def confirmar():
             erro_medio.pop(0)
 
     capital_answer = capital_resposta.upper().strip().replace(' E ', ',').split(',')
-    print(capital_answer)
     capital_answer = [capital.strip() for capital in capital_answer]
-    print(capital_answer)
     capital_answer = [" ".join(capital.split()) for capital in capital_answer]
-    print(capital_answer)
-    print()
     num_capitais = len(respostas[pais_aleatorio][1])
     acerto_capital = 0
     i=0
@@ -521,7 +517,8 @@ janela.title("Treino de Países")
 
 janela.geometry("850x850+570+110")
 
-janela.iconbitmap(diretorio+r'\ícone\world.ico')
+icon_img = ImageTk.PhotoImage(file=diretorio + r'/ícone/world.png')
+janela.iconphoto(False, icon_img, icon_img)
 
 style = ttk.Style(janela)
 style.layout('Tabless.TNotebook.Tab', [])
@@ -540,7 +537,7 @@ Tabs.add(tab_configuracao,text="Configuração")
 
 # ------------------------------ MENU
 
-img_config = Image.open(diretorio+f'\\ícone\\config.png')
+img_config = Image.open(diretorio+f'/ícone/config.png')
 img_config = img_config.resize((20,20), Image.LANCZOS)
 img_config = ImageTk.PhotoImage(img_config)
 
@@ -561,8 +558,8 @@ bt_config = Button(tab_menu,width=30,height=30,image=img_config,command=muda_con
 bt_config.place(x=10,y=10)
 
 helv36 = tkFont.Font(family='Helvetica', size=15, weight=tkFont.BOLD)
-bt_info = Button(tab_menu,width=3,text='i',font=helv36,command=informa)
-bt_info.place(relx=1,rely=1,x=-50,y=-50)
+bt_info = Button(tab_menu,width=2,text='i',font=helv36,command=informa)
+bt_info.place(relx=1,rely=1,x=-60,y=-50)
 
 
 var_brasil=IntVar()
@@ -706,7 +703,7 @@ else:
 cbb_modo.bind("<<ComboboxSelected>>", lambda event: on_config_change())
 
 lb_configuracao = Label(tab_configuracao, text="Modo de jogo")
-lb_configuracao.place(relx=0.5,x=35,y=6*pos-2)
+lb_configuracao.place(relx=0.5,x=64,y=6*pos-1)
 
 cbb_tipo = ttk.Combobox(tab_configuracao, values=["Aleatório", "Sequencial"])
 cbb_tipo.place(relx=0.5,x=-115,y=7*pos)
@@ -717,7 +714,7 @@ else:
 cbb_tipo.bind("<<ComboboxSelected>>", lambda event: on_config_change())
 
 lb_configuracao = Label(tab_configuracao, text="Tipo de jogo")
-lb_configuracao.place(relx=0.5,x=35,y=7*pos-2)
+lb_configuracao.place(relx=0.5,x=64,y=7*pos)
 
 
 def nova_pos(event):
@@ -741,14 +738,14 @@ def nova_pos(event):
         e_capital.place(x=(janela.winfo_width()-e_pais.winfo_reqwidth())/2,y=480+50+40)
         e_pais.place(x=(janela.winfo_width()-e_pais.winfo_reqwidth())/2,y=480+40)
         
-        if regiao_aleatoria == 'Brasil':
-            lb_pais.place(x=(janela.winfo_width()-e_pais.winfo_reqwidth())/2-47,y=516)
-            lb_regiao.place(x=(janela.winfo_width()-e_pais.winfo_reqwidth())/2-50,y=617)
+        if regiao_aleatoria == 'brasil':
+            lb_pais.place(x=(janela.winfo_width()-e_pais.winfo_reqwidth())/2-53,y=521)
+            lb_regiao.place(x=(janela.winfo_width()-e_pais.winfo_reqwidth())/2-55,y=621)
         else:
-            lb_pais.place(x=(janela.winfo_width()-e_pais.winfo_reqwidth())/2-35,y=516)
-            lb_regiao.place(x=(janela.winfo_width()-e_pais.winfo_reqwidth())/2-70,y=617)
+            lb_pais.place(x=(janela.winfo_width()-e_pais.winfo_reqwidth())/2-36,y=521)
+            lb_regiao.place(x=(janela.winfo_width()-e_pais.winfo_reqwidth())/2-80,y=621)
             
-        lb_capital.place(x=(janela.winfo_width()-e_pais.winfo_reqwidth())/2-50,y=567)
+        lb_capital.place(x=(janela.winfo_width()-e_pais.winfo_reqwidth())/2-55,y=572)
 
         lb_pergunta.place(x=(janela.winfo_width()-lb_pergunta.winfo_reqwidth())/2,y=460)
 
