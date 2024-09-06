@@ -228,8 +228,6 @@ def dica_add():
     except:
         dicas_[pais] = [dicas]
 
-    print(dicas_)
-
     with open('dicas.pkl', 'wb') as f:
         pickle.dump(dicas_, f)
 
@@ -270,8 +268,6 @@ def dica_read():
 
     counter_dica+=1
 
-    print(counter_dica)
-
 def dica_del():
 
     global counter_dica
@@ -295,8 +291,6 @@ def dica_del():
     with open('dicas.pkl', 'wb') as f:
         pickle.dump(dicas_, f)
 
-    
-
     counter_dica-=1
 
     if counter_dica > len(dicas_[pais])-1:
@@ -319,7 +313,6 @@ def dica():
     top = Toplevel(janela)
     top.geometry("350x320+600+300")
     top.title("Menu de dicas")
-    #top.iconbitmap(diretorio+r'/ícone/world.png')
     top.attributes('-topmost', 'true')
     top.resizable(False,False)
 
@@ -343,7 +336,6 @@ status = 0
 def pais_aleatorio_f():
 
     global status_seq
-    #global change_region
 
     global status
 
