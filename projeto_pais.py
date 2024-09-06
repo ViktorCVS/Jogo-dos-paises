@@ -172,12 +172,11 @@ def muda_paises():
         top = Toplevel(janela)
         top.geometry("260x70+600+300")
         top.title("Erro de seleção")
-        #top.iconbitmap(diretorio+r'/ícone/world.png')
         top.attributes('-topmost', 'true')
         top.resizable(False,False)
 
         lb_informacao_1 = Label(top, text='Selecione alguma região!')
-        lb_informacao_1.place(x=60,y=20)
+        lb_informacao_1.place(x=45,y=22)
 
 
     elif not var_salvar.get() or status==0 or status==1:
@@ -224,6 +223,8 @@ def pais_aleatorio_f():
     
     global control
     global control_2
+
+    global altura
 
     b_proximo.configure(state=DISABLED)
 
@@ -340,7 +341,14 @@ def pais_aleatorio_f():
     img_bandeira = Image.open(diretorio+f'/bandeiras/{regiao_aleatoria}/{pais_aleatorio}')
     dim_img = list(img_bandeira.size)
     proporcao = dim_img[1]/dim_img[0]
-    img_bandeira = img_bandeira.resize((280,round(280*proporcao)), Image.LANCZOS)
+    if round(280*proporcao) <= 280:
+        altura = round(280*proporcao)
+        img_bandeira = img_bandeira.resize((280,round(280*proporcao)), Image.LANCZOS)
+    else:
+        altura = round(200*proporcao)
+        img_bandeira = img_bandeira.resize((200,round(200*proporcao)), Image.LANCZOS)
+
+    print(dim_img)
     img_bandeira= ImageTk.PhotoImage(img_bandeira)
     
     img_loc = Image.open(diretorio+f'/local/{regiao_aleatoria}/{pais_aleatorio}')
@@ -508,6 +516,18 @@ def confirmar():
 
     with open('pontos.pkl', 'wb') as f:
         pickle.dump(pontuacao, f)
+
+def dica():
+
+    top = Toplevel(janela)
+    top.geometry("260x70+600+300")
+    top.title("Erro de seleção")
+    #top.iconbitmap(diretorio+r'/ícone/world.png')
+    top.attributes('-topmost', 'true')
+    top.resizable(False,False)
+
+    lb_informacao_1 = Label(top, text='Selecione alguma região!')
+    lb_informacao_1.place(x=50,y=20)
         
 
 # ------------------------------ DEFINIÇÃO
@@ -657,6 +677,8 @@ b_proximo.configure(state=DISABLED)
 
 b_menu = Button(tab_paises,width=20,text="Menu",command=muda_menu)
 
+b_jogo_dica = Button(tab_paises,width=10,text="Dicas",command=dica)
+
 
 # ------------------------------ Configuração
 
@@ -722,13 +744,14 @@ def nova_pos(event):
     try:
 
         if cbb_modo.get()=='Bandeira e Local':
+            
 
-            lb_bandeira.place(x=(janela.winfo_width()-lb_bandeira.winfo_reqwidth()-lb_loc.winfo_reqwidth())/3,y=150)
+            lb_bandeira.place(x=(janela.winfo_width()-lb_bandeira.winfo_reqwidth()-lb_loc.winfo_reqwidth())/3,y=(460-altura)/2)
             lb_loc.place(x=2*((janela.winfo_width()-lb_bandeira.winfo_reqwidth()-lb_loc.winfo_reqwidth())/3)+lb_bandeira.winfo_reqwidth(),y=100)
 
         elif cbb_modo.get()=='Bandeira apenas':
 
-            lb_bandeira.place(x=(janela.winfo_width()-lb_bandeira.winfo_reqwidth())/2,y=150)
+            lb_bandeira.place(x=(janela.winfo_width()-lb_bandeira.winfo_reqwidth())/2,y=(460-altura)/2)
 
         elif cbb_modo.get()=='Local apenas':
 
@@ -752,6 +775,7 @@ def nova_pos(event):
         b_confirmar.place(x=(janela.winfo_width()-b_confirmar.winfo_reqwidth())/2,y=640+40)
         b_proximo.place(x=(janela.winfo_width()-b_confirmar.winfo_reqwidth())/2,y=690+40)
         b_menu.place(x=(janela.winfo_width()-b_confirmar.winfo_reqwidth())/2,y=740+40)
+        b_jogo_dica.place(relx=1,x=-b_confirmar.winfo_reqwidth(),y=740+40)
         b_menu_config.place(x=(janela.winfo_width()-b_confirmar.winfo_reqwidth())/2,y=740+40)
         
         lb_correto.place(x=(janela.winfo_width()-lb_correto.winfo_reqwidth())/2,y=460)
