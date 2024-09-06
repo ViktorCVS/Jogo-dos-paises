@@ -13,6 +13,7 @@ locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 diretorio = os.getcwd()
 
+altura = 0
 control   = 0
 control_2 = 0
 
@@ -743,11 +744,20 @@ cbb_tipo.bind("<<ComboboxSelected>>", lambda event: on_config_change())
 lb_configuracao = Label(tab_configuracao, text="Tipo de jogo")
 lb_configuracao.place(relx=0.5,x=64,y=7*pos)
 
+cbb_idioma = ttk.Combobox(tab_configuracao, values=["Brasileiro"])
+cbb_idioma.place(relx=0.5,x=-115,y=8*pos)
+cbb_idioma.current(0)
+
+lb_config_idioma = Label(tab_configuracao, text="Idioma")
+lb_config_idioma.place(relx=0.5,x=64,y=8*pos)
+
+cbb_tipo.bind("<<ComboboxSelected>>", lambda event: on_config_change())
+
 
 def nova_pos(event):
 
     try:
-
+        
         if cbb_modo.get()=='Bandeira e Local':
             
             lb_bandeira.place(x=(janela.winfo_width()-lb_bandeira.winfo_reqwidth()-lb_loc.winfo_reqwidth())/3,y=(460-altura)/2)
