@@ -23,7 +23,6 @@ pais_passado = ''
 gerador = np.random.default_rng()
 
 status_seq = True
-#change_region = False
 
 rL = {'Brasil':27,'as':13,'ac':23,'an':4,'af':56,'eu':60,'oc':18,'aa':54}
 
@@ -660,7 +659,6 @@ janela.iconphoto(False, icon_img, icon_img)
 
 validacao = janela.register(limitar_caracteres)
 
-
 style = ttk.Style(janela)
 style.layout('Tabless.TNotebook.Tab', [])
 
@@ -865,8 +863,6 @@ cbb_idioma.current(0)
 
 lb_config_idioma = Label(tab_configuracao, text="Idioma")
 lb_config_idioma.place(relx=0.5,x=64,y=8*pos)
-
-cbb_tipo.bind("<<ComboboxSelected>>", lambda event: on_config_change())
 
 
 def nova_pos(event):
