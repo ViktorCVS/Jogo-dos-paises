@@ -348,7 +348,6 @@ def pais_aleatorio_f():
         altura = round(200*proporcao)
         img_bandeira = img_bandeira.resize((200,round(200*proporcao)), Image.LANCZOS)
 
-    print(dim_img)
     img_bandeira= ImageTk.PhotoImage(img_bandeira)
     
     img_loc = Image.open(diretorio+f'/local/{regiao_aleatoria}/{pais_aleatorio}')
@@ -520,14 +519,20 @@ def confirmar():
 def dica():
 
     top = Toplevel(janela)
-    top.geometry("260x70+600+300")
-    top.title("Erro de seleção")
+    top.geometry("350x300+600+300")
+    top.title("Menu de dicas")
     #top.iconbitmap(diretorio+r'/ícone/world.png')
     top.attributes('-topmost', 'true')
     top.resizable(False,False)
 
-    lb_informacao_1 = Label(top, text='Selecione alguma região!')
-    lb_informacao_1.place(x=50,y=20)
+    e_dica = Entry(top,width=35)
+    e_dica.place(x=35,y=22)
+
+    bt_dica_add = Button(top,width=10,text="Adicionar dica",command=top.destroy)
+    bt_dica_add.place(x=120,y=60)
+
+    bt_dica_read = Button(top,width=10,text="Ler dica",command=top.destroy)
+    bt_dica_read.place(x=120,y=240)
         
 
 # ------------------------------ DEFINIÇÃO
@@ -745,7 +750,6 @@ def nova_pos(event):
 
         if cbb_modo.get()=='Bandeira e Local':
             
-
             lb_bandeira.place(x=(janela.winfo_width()-lb_bandeira.winfo_reqwidth()-lb_loc.winfo_reqwidth())/3,y=(460-altura)/2)
             lb_loc.place(x=2*((janela.winfo_width()-lb_bandeira.winfo_reqwidth()-lb_loc.winfo_reqwidth())/3)+lb_bandeira.winfo_reqwidth(),y=100)
 
