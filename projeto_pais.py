@@ -17,6 +17,9 @@ altura = 0
 control   = 0
 control_2 = 0
 
+counter_dica = 0
+pais_passado = ''
+
 gerador = np.random.default_rng()
 
 status_seq = True
@@ -42,6 +45,14 @@ except:
     pref = [[1,1,0,0,'Bandeira e Local','Aleatório'],[0,1,1,1,1,1,1,1]]
     with open('pref.pkl', 'wb') as f:
         pickle.dump(pref,f)
+
+try:
+    with open('dicas.pkl', 'rb') as f:
+        dicas_=pickle.load(f)
+except:
+    dicas_ = {}
+    with open('dicas.pkl', 'wb') as f:
+        pickle.dump(dicas_,f)
 
 pont_media = []
 erro_medio = []
@@ -198,7 +209,135 @@ def teclado():
     else:
 
         confirmar()
-   
+
+def limitar_caracteres(entrada):
+    if len(entrada) > 222:
+        return False
+    return True
+
+def dica_add():
+
+    global dicas_
+
+    dicas = e_dica.get()
+
+    pais = pais_aleatorio.split('.')[0]
+
+    try:
+        dicas_[pais].append(dicas)
+    except:
+        dicas_[pais] = [dicas]
+
+    print(dicas_)
+
+    with open('dicas.pkl', 'wb') as f:
+        pickle.dump(dicas_, f)
+
+    e_dica.delete(0, END)
+
+def dica_read():
+
+    global counter_dica
+    global pais_passado
+
+    pais = pais_aleatorio.split('.')[0]
+
+    with open('dicas.pkl', 'rb') as f:
+        dica_=pickle.load(f)
+
+    try:
+        dica_[pais]
+
+    except:
+        dica_[pais] = []
+
+
+    if counter_dica==len(dica_[pais]) or pais!=pais_passado:
+        counter_dica=0
+
+    pais_passado = pais
+    
+    if len(dica_[pais])==0:
+        return
+
+    corte = len(dica_[pais][counter_dica])/38
+    i=1
+    while i<corte:
+        dica_[pais][counter_dica]=dica_[pais][counter_dica][:38*i-1]+'\n'+dica_[pais][counter_dica][38*i-1:]
+        i+=1
+
+    lb_dica["text"]=dica_[pais][counter_dica]
+
+    counter_dica+=1
+
+    print(counter_dica)
+
+def dica_del():
+
+    global counter_dica
+    global dicas_
+
+    pais = pais_aleatorio.split('.')[0]
+
+    with open('dicas.pkl', 'rb') as f:
+        dicas_=pickle.load(f)
+
+    try:
+        dicas_[pais]
+    except:
+        dicas_[pais] = []
+
+    if len(dicas_[pais]) == 0:
+        return
+    
+    dicas_[pais].pop(counter_dica-1)
+
+    with open('dicas.pkl', 'wb') as f:
+        pickle.dump(dicas_, f)
+
+    
+
+    counter_dica-=1
+
+    if counter_dica > len(dicas_[pais])-1:
+        counter_dica = 0
+
+    if len(dicas_[pais]) == 0:
+        lb_dica["text"]=""
+        return
+
+    lb_dica["text"]=dicas_[pais][counter_dica]
+
+    counter_dica+=1
+
+
+def dica():
+
+    global e_dica
+    global lb_dica
+
+    top = Toplevel(janela)
+    top.geometry("350x320+600+300")
+    top.title("Menu de dicas")
+    #top.iconbitmap(diretorio+r'/ícone/world.png')
+    top.attributes('-topmost', 'true')
+    top.resizable(False,False)
+
+    e_dica = Entry(top,width=35, validate="key", validatecommand=(validacao, '%P'))
+    e_dica.place(x=35,y=22)
+
+    lb_dica = Label(top, text='',justify="left")
+    lb_dica.place(x=20,y=110)
+
+    bt_dica_add = Button(top,width=10,text="Adicionar dica",command=dica_add)
+    bt_dica_add.place(x=120,y=60)
+
+    bt_dica_read = Button(top,width=10,text="Ler dica",command=dica_read)
+    bt_dica_read.place(x=120,y=240)
+
+    bt_dica_del = Button(top,width=10,text="Apagar dica",command=dica_del)
+    bt_dica_del.place(x=120,y=280)
+
 status = 0
 
 def pais_aleatorio_f():
@@ -516,26 +655,7 @@ def confirmar():
 
     with open('pontos.pkl', 'wb') as f:
         pickle.dump(pontuacao, f)
-
-def dica():
-
-    top = Toplevel(janela)
-    top.geometry("350x300+600+300")
-    top.title("Menu de dicas")
-    #top.iconbitmap(diretorio+r'/ícone/world.png')
-    top.attributes('-topmost', 'true')
-    top.resizable(False,False)
-
-    e_dica = Entry(top,width=35)
-    e_dica.place(x=35,y=22)
-
-    bt_dica_add = Button(top,width=10,text="Adicionar dica",command=top.destroy)
-    bt_dica_add.place(x=120,y=60)
-
-    bt_dica_read = Button(top,width=10,text="Ler dica",command=top.destroy)
-    bt_dica_read.place(x=120,y=240)
         
-
 # ------------------------------ DEFINIÇÃO
 
 janela = Tk()
@@ -545,6 +665,9 @@ janela.geometry("850x850+570+110")
 
 icon_img = ImageTk.PhotoImage(file=diretorio + r'/ícone/world.png')
 janela.iconphoto(False, icon_img, icon_img)
+
+validacao = janela.register(limitar_caracteres)
+
 
 style = ttk.Style(janela)
 style.layout('Tabless.TNotebook.Tab', [])
