@@ -220,6 +220,9 @@ def dica_add():
 
     dicas = e_dica.get()
 
+    if dicas.strip() == "":
+        return
+
     pais = pais_aleatorio.split('.')[0]
 
     try:
