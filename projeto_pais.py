@@ -179,6 +179,8 @@ def muda_config():
 
 def muda_paises():
 
+    global status_seq
+
     if not var_brasil.get() and not var_am_sul.get() and not var_am_central.get() and not var_am_norte.get() and not var_africa.get() and not var_europa.get() and not var_oceania.get() and not var_asia.get():
 
         top = Toplevel(janela)
@@ -192,12 +194,11 @@ def muda_paises():
         lb_informacao_1.place(x=60,y=20)
 
 
-    elif not var_salvar.get() or status==0 or status==1:
+    elif (not var_salvar.get() or status==0 or status==1) or status_seq:
         Tabs.select(tab_paises)
         pais_aleatorio_f()
-
-
-    elif status==2 and var_salvar.get():
+        
+    elif (status==2 and var_salvar.get()) and not status_seq:
         Tabs.select(tab_paises)
         confirmar()
 
@@ -339,7 +340,6 @@ status = 0
 def pais_aleatorio_f():
 
     global status_seq
-    #global change_region
 
     global status
 
@@ -435,7 +435,6 @@ def pais_aleatorio_f():
         control_2=0
 
     else:
-
         if status_seq and not var_embar.get():
             
             regiao_aleatoria = regiao[control]
@@ -443,25 +442,23 @@ def pais_aleatorio_f():
             paises = sorted(paises,key=functools.cmp_to_key(locale.strcoll))
 
         elif status_seq and var_embar.get():
-
             paises = []
             control=0
             while control<len(regiao):
                 regiao_aleatoria = regiao[control]
                 paises.extend([f"{regiao_aleatoria}\\{i}" for i in os.listdir(diretorio+f'\\bandeiras\\{regiao_aleatoria}')])
                 control+=1
-        
             gerador.shuffle(paises)
-
+        
         while(True):
             
             pais_aleatorio = paises[control_2]
 
-            if pais_aleatorio.split('.')[0] in base_dados_paises.respostas_independentes.keys() and not var_independente.get():
+            if pais_aleatorio.split('.')[0].split('\\')[1] in base_dados_paises.respostas_independentes.keys() and not var_independente.get():
                 
                 control_2+=1
 
-            elif pais_aleatorio.split('.')[0] in base_dados_paises.respostas_fantasmas.keys() and not var_fantasmas.get():
+            elif pais_aleatorio.split('.')[0].split('\\')[1] in base_dados_paises.respostas_fantasmas.keys() and not var_fantasmas.get():
 
                 control_2+=1
 
@@ -537,9 +534,9 @@ def confirmar():
     lb_errado['text']=''
     lb_pergunta['text']=''
 
-
-    pais_aleatorio = pais_aleatorio.split('.')[0]
-    pais_aleatorio = pais_aleatorio.split('\\')[1]
+    #print(pais_aleatorio)
+    pais_confirmacao = pais_aleatorio.split('.')[0]
+    pais_confirmacao = pais_confirmacao.split('\\')[1]
 
     pais_resposta = e_pais.get()
     capital_resposta = e_capital.get()
@@ -553,7 +550,7 @@ def confirmar():
 
     pais_answer = pais_resposta.upper().strip()
     pais_answer = " ".join(pais_answer.split())
-    if pais_answer in [local.upper() for local in respostas[pais_aleatorio][0]]:
+    if pais_answer in [local.upper() for local in respostas[pais_confirmacao][0]]:
 
         acerto += 1
         
@@ -571,13 +568,13 @@ def confirmar():
     capital_answer = capital_resposta.upper().strip().replace(' E ', ',').split(',')
     capital_answer = [capital.strip() for capital in capital_answer]
     capital_answer = [" ".join(capital.split()) for capital in capital_answer]
-    num_capitais = len(respostas[pais_aleatorio][1])
+    num_capitais = len(respostas[pais_confirmacao][1])
     acerto_capital = 0
     i=0
     j=0
     while(i<len(capital_answer)):
         while(j<num_capitais):
-            if capital_answer[i] in [local.upper() for local in respostas[pais_aleatorio][1][j]]:
+            if capital_answer[i] in [local.upper() for local in respostas[pais_confirmacao][1][j]]:
                 acerto_capital+=1
                 break
 
@@ -601,7 +598,7 @@ def confirmar():
 
     continente_answer = continente_resposta.upper().strip()
     continente_answer = " ".join(continente_answer.split())
-    if continente_answer in [local.upper() for local in respostas[pais_aleatorio][2]]:
+    if continente_answer in [local.upper() for local in respostas[pais_confirmacao][2]]:
 
         acerto += 1
         
@@ -617,7 +614,7 @@ def confirmar():
             erro_medio.pop(0)
 
     
-    string_capital = [info[0] for info in respostas[pais_aleatorio][1]]
+    string_capital = [info[0] for info in respostas[pais_confirmacao][1]]
     string_capital = ', '.join(string_capital)
     string_capital = string_capital[::-1].replace(", "[::-1], " e "[::-1], 1)[::-1]
     if acerto == 3:
@@ -631,14 +628,14 @@ def confirmar():
 
     elif acerto == 0:
 
-        lb_errado['text']=f"Respostas erradas! As respostas certas são {respostas[pais_aleatorio][0][0]}, {string_capital}, {respostas[pais_aleatorio][2][0]}."
+        lb_errado['text']=f"Respostas erradas! As respostas certas são {respostas[pais_confirmacao][0][0]}, {string_capital}, {respostas[pais_confirmacao][2][0]}."
         lb_errado.lift()
         
         pontuacao[-1]=0
 
     else:
 
-        lb_qcorreto['text']=f"Resposta quase certa! As respostas certas são {respostas[pais_aleatorio][0][0]}, {string_capital}, {respostas[pais_aleatorio][2][0]}."
+        lb_qcorreto['text']=f"Resposta quase certa! As respostas certas são {respostas[pais_confirmacao][0][0]}, {string_capital}, {respostas[pais_confirmacao][2][0]}."
         lb_qcorreto.lift()
 
         pontuacao[-1]=0
