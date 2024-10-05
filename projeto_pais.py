@@ -413,20 +413,20 @@ def pais_aleatorio_f():
     if cbb_tipo.get() == 'Aleatório':
 
         regiao_aleatoria = gerador.choice(regiao)
-        paises = os.listdir(diretorio+f'\\bandeiras\\{regiao_aleatoria}')
+        paises = [f"{regiao_aleatoria}\\{i}" for i in os.listdir(diretorio+f'\\bandeiras\\{regiao_aleatoria}')]
 
         while(True):
             
             pais_aleatorio = gerador.choice(paises)
-            if pais_aleatorio.split('.')[0] in base_dados_paises.respostas_independentes.keys() and var_independente.get():
+            if pais_aleatorio.split('.')[0].split('\\')[1] in base_dados_paises.respostas_independentes.keys() and var_independente.get():
 
                 break
 
-            elif pais_aleatorio.split('.')[0] in base_dados_paises.respostas_fantasmas.keys() and var_fantasmas.get():
+            elif pais_aleatorio.split('.')[0].split('\\')[1] in base_dados_paises.respostas_fantasmas.keys() and var_fantasmas.get():
 
                 break
 
-            elif pais_aleatorio.split('.')[0] not in base_dados_paises.respostas_fantasmas.keys() or pais_aleatorio.split('.')[0] not in base_dados_paises.respostas_independentes.keys():
+            elif pais_aleatorio.split('.')[0].split('\\')[1] not in base_dados_paises.respostas_fantasmas.keys() or pais_aleatorio.split('.')[0] not in base_dados_paises.respostas_independentes.keys():
 
                 break
                 

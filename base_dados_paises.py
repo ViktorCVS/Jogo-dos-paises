@@ -227,7 +227,7 @@ respostas_aa = {'Afeganistão':[['Afeganistão'],[['Cabul','Cábul']],['Ásia']]
                 'Paquistão':[['Paquistão'],[['Islamabade','Islamabad']],['Ásia']],
                 'Quirguistão':[['Quirguistão','Quirguizistão','Quirguízia'],[['Bisqueque','Pispeque','Frunze']],['Ásia']],
                 'Rússia':[['Rússia'],[['Moscou','Moscovo']],['Ásia','Europa']],
-                'Singapura':[['Singapura'],[['Singapura']],['Ásia']],
+                'Singapura':[['Singapura','Cingapura'],[['Singapura','Cingapura']],['Ásia']],
                 'Síria':[['Síria'],[['Damasco']],['Ásia']],
                 'Sri Lanka':[['Sri Lanka','Sri Lanca','Seri Lanca'],[['Seri Jaiavardenapura-Cota','Sri Jaiavardenapura-Cota','Sri Jayawardenapura-Kotte','Cota','Kotte']],['Ásia']],
                 'Tajiquistão':[['Tajiquistão','Tadjiquistão'],[['Duxambé','Duchambé']],['Ásia']],
