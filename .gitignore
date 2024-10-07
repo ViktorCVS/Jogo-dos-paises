@@ -1,7 +1,5 @@
 
 __pycache__/
 
-pref.pkl
-pontos.pkl
-dicas.pkl
+*.pkl
 projeto_pais_banco.py

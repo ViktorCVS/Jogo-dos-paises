@@ -23,6 +23,7 @@ pais_passado = ''
 gerador = np.random.default_rng()
 
 status_seq = True
+#change_region = False
 
 rL = {'Brasil':27,'as':13,'ac':23,'an':4,'af':56,'eu':60,'oc':18,'aa':54}
 
@@ -83,24 +84,23 @@ def ciclo():
 def informa():
 
     top = Toplevel(janela)
-    top.geometry("325x345+600+300")
+    top.geometry("290x320+600+300")
     top.title("Informações")
-    #top.iconbitmap(diretorio+r'\ícone\world.png')
     top.attributes('-topmost', 'true')
     top.resizable(False,False)
 
-    lb_informacao_1 = Label(top, text='\n* Use a acentuação e pontuação correta!\nO nome dos países sempre em português!',justify="left")
+    lb_informacao_1 = Label(top, text='\n* Use a acentuação e pontuação correta! O nome\ndos países sempre em português!',justify="left")
     lb_informacao_1.place(x=10,y=5)
-    lb_informacao_2 = Label(top, text='\n* Mudar a região no modo sequencial vai\nzerar o seu progresso!',justify="left")
-    lb_informacao_2.place(x=10,y=60)
-    lb_informacao_3 = Label(top, text='\n* Capitais podem ser escritas tanto em por-\ntuguês quanto na língua local!\nSeparadas por "e" ou ","!',justify="left")
-    lb_informacao_3.place(x=10,y=115)
+    lb_informacao_2 = Label(top, text='\n* Mudar a região no modo sequencial vai zerar o\nseu progresso!',justify="left")
+    lb_informacao_2.place(x=10,y=55)
+    lb_informacao_3 = Label(top, text='\n* Capitais podem ser escritas tanto em português\n quanto na língua local! Separadas por "e" ou ","!',justify="left")
+    lb_informacao_3.place(x=10,y=105)
     lb_informacao_4 = Label(top, text='\n* As respostas podem ser escritas maiúsculas,\n minúsculas ou de forma mista!',justify="left")
-    lb_informacao_4.place(x=10,y=170)
-    lb_informacao_4 = Label(top, text='\n* Países declarados independentes estão\nativados por definição, podendo ser desati-\nvados em configurações!',justify="left")
-    lb_informacao_4.place(x=10,y=220)
+    lb_informacao_4.place(x=10,y=155)
+    lb_informacao_4 = Label(top, text='\n* Países declarados independentes estão ativados\n por definição, podendo ser desativados em\n configurações!',justify="left")
+    lb_informacao_4.place(x=10,y=205)
     lb_informacao_5 = Label(top, text='\n* Palestina Livre!',justify="left")
-    lb_informacao_5.place(x=10,y=290)
+    lb_informacao_5.place(x=10,y=270)
     
 
 
@@ -178,6 +178,8 @@ def muda_config():
 
 def muda_paises():
 
+    global status_seq
+
     if not var_brasil.get() and not var_am_sul.get() and not var_am_central.get() and not var_am_norte.get() and not var_africa.get() and not var_europa.get() and not var_oceania.get() and not var_asia.get():
 
         top = Toplevel(janela)
@@ -187,15 +189,14 @@ def muda_paises():
         top.resizable(False,False)
 
         lb_informacao_1 = Label(top, text='Selecione alguma região!')
-        lb_informacao_1.place(x=45,y=22)
+        lb_informacao_1.place(x=60,y=20)
 
 
-    elif not var_salvar.get() or status==0 or status==1:
+    elif (not var_salvar.get() or status==0 or status==1) or status_seq:
         Tabs.select(tab_paises)
         pais_aleatorio_f()
-
-
-    elif status==2 and var_salvar.get():
+        
+    elif (status==2 and var_salvar.get()) and not status_seq:
         Tabs.select(tab_paises)
         confirmar()
 
@@ -219,9 +220,7 @@ def dica_add():
     global dicas_
 
     dicas = e_dica.get()
-
-    if dicas.strip() == "":
-        return
+    if dicas == "":return
 
     pais = pais_aleatorio.split('.')[0]
 
@@ -318,20 +317,20 @@ def dica():
     top.attributes('-topmost', 'true')
     top.resizable(False,False)
 
-    e_dica = Entry(top,width=35, validate="key", validatecommand=(validacao, '%P'))
-    e_dica.place(x=35,y=22)
+    e_dica = Entry(top,width=47, validate="key", validatecommand=(validacao, '%P'))
+    e_dica.place(x=30,y=22)
 
     lb_dica = Label(top, text='',justify="left")
     lb_dica.place(x=20,y=110)
 
-    bt_dica_add = Button(top,width=10,text="Adicionar dica",command=dica_add)
-    bt_dica_add.place(x=120,y=60)
+    bt_dica_add = Button(top,width=11,text="Adicionar dica",command=dica_add)
+    bt_dica_add.place(relx=0.5,x=-bt_dica_add.winfo_reqwidth()/2,y=60)
 
-    bt_dica_read = Button(top,width=10,text="Ler dica",command=dica_read)
-    bt_dica_read.place(x=120,y=240)
+    bt_dica_read = Button(top,width=11,text="Ler dica",command=dica_read)
+    bt_dica_read.place(relx=0.5,x=-bt_dica_add.winfo_reqwidth()/2,y=240)
 
-    bt_dica_del = Button(top,width=10,text="Apagar dica",command=dica_del)
-    bt_dica_del.place(x=120,y=280)
+    bt_dica_del = Button(top,width=11,text="Apagar dica",command=dica_del)
+    bt_dica_del.place(relx=0.5,x=-bt_dica_add.winfo_reqwidth()/2,y=280)
 
 status = 0
 
@@ -372,14 +371,13 @@ def pais_aleatorio_f():
     e_continente.delete(0, END)
 
     e_pais.focus()
-
     if status_seq:
 
         regiao = []
 
         if var_brasil.get():
 
-            regiao.append('brasil')
+            regiao.append('Brasil')
 
         if var_am_sul.get():
 
@@ -408,24 +406,24 @@ def pais_aleatorio_f():
         if var_asia.get():
 
             regiao.append('aa')
-
+            
     if cbb_tipo.get() == 'Aleatório':
 
         regiao_aleatoria = gerador.choice(regiao)
-        paises = os.listdir(diretorio+f'/bandeiras/{regiao_aleatoria}')
+        paises = [f"{regiao_aleatoria}//{i}" for i in os.listdir(diretorio+f'//bandeiras//{regiao_aleatoria}')]
 
         while(True):
             
             pais_aleatorio = gerador.choice(paises)
-            if pais_aleatorio.split('.')[0] in base_dados_paises.respostas_independentes.keys() and var_independente.get():
+            if pais_aleatorio.split('.')[0].split('//')[1] in base_dados_paises.respostas_independentes.keys() and var_independente.get():
 
                 break
 
-            elif pais_aleatorio.split('.')[0] in base_dados_paises.respostas_fantasmas.keys() and var_fantasmas.get():
+            elif pais_aleatorio.split('.')[0].split('//')[1] in base_dados_paises.respostas_fantasmas.keys() and var_fantasmas.get():
 
                 break
 
-            elif pais_aleatorio.split('.')[0] not in base_dados_paises.respostas_fantasmas.keys() or pais_aleatorio.split('.')[0] not in base_dados_paises.respostas_independentes.keys():
+            elif pais_aleatorio.split('.')[0].split('//')[1] not in base_dados_paises.respostas_fantasmas.keys() or pais_aleatorio.split('.')[0] not in base_dados_paises.respostas_independentes.keys():
 
                 break
                 
@@ -434,29 +432,30 @@ def pais_aleatorio_f():
         control_2=0
 
     else:
-
         if status_seq and not var_embar.get():
             
             regiao_aleatoria = regiao[control]
-            paises = os.listdir(diretorio+f'/bandeiras/{regiao_aleatoria}')
+            paises = os.listdir(diretorio+f'//bandeiras//{regiao_aleatoria}')
             paises = sorted(paises,key=functools.cmp_to_key(locale.strcoll))
 
         elif status_seq and var_embar.get():
-
-            gerador.shuffle(regiao)
-            regiao_aleatoria = regiao[control]
-            paises = os.listdir(diretorio+f'/bandeiras/{regiao_aleatoria}')
+            paises = []
+            control=0
+            while control<len(regiao):
+                regiao_aleatoria = regiao[control]
+                paises.extend([f"{regiao_aleatoria}//{i}" for i in os.listdir(diretorio+f'//bandeiras//{regiao_aleatoria}')])
+                control+=1
             gerador.shuffle(paises)
-
+        
         while(True):
             
             pais_aleatorio = paises[control_2]
 
-            if pais_aleatorio.split('.')[0] in base_dados_paises.respostas_independentes.keys() and not var_independente.get():
+            if pais_aleatorio.split('.')[0].split('//')[1] in base_dados_paises.respostas_independentes.keys() and not var_independente.get():
                 
                 control_2+=1
 
-            elif pais_aleatorio.split('.')[0] in base_dados_paises.respostas_fantasmas.keys() and not var_fantasmas.get():
+            elif pais_aleatorio.split('.')[0].split('//')[1] in base_dados_paises.respostas_fantasmas.keys() and not var_fantasmas.get():
 
                 control_2+=1
 
@@ -472,7 +471,7 @@ def pais_aleatorio_f():
             control=0
 
     status_seq = False
-    img_bandeira = Image.open(diretorio+f'/bandeiras/{regiao_aleatoria}/{pais_aleatorio}')
+    img_bandeira = Image.open(diretorio+f'//bandeiras//{pais_aleatorio}')
     dim_img = list(img_bandeira.size)
     proporcao = dim_img[1]/dim_img[0]
     if round(280*proporcao) <= 280:
@@ -481,10 +480,9 @@ def pais_aleatorio_f():
     else:
         altura = round(200*proporcao)
         img_bandeira = img_bandeira.resize((200,round(200*proporcao)), Image.LANCZOS)
-
     img_bandeira= ImageTk.PhotoImage(img_bandeira)
     
-    img_loc = Image.open(diretorio+f'/local/{regiao_aleatoria}/{pais_aleatorio}')
+    img_loc = Image.open(diretorio+f'//local//{pais_aleatorio}')
     img_loc = img_loc.resize((300,300), Image.LANCZOS)
     img_loc= ImageTk.PhotoImage(img_loc)
 
@@ -503,7 +501,7 @@ def pais_aleatorio_f():
         lb_bandeira['image']=''
         lb_loc['image']=img_loc    
 
-    if regiao_aleatoria == 'brasil':
+    if regiao_aleatoria == 'Brasil':
 
         lb_pergunta['text']="Qual é o estado, sua capital e sua região, respectivamente?"
         lb_pais['text']='Estado:'
@@ -533,8 +531,9 @@ def confirmar():
     lb_errado['text']=''
     lb_pergunta['text']=''
 
-
-    pais_aleatorio = pais_aleatorio.split('.')[0]
+    #print(pais_aleatorio)
+    pais_confirmacao = pais_aleatorio.split('.')[0]
+    pais_confirmacao = pais_confirmacao.split('//')[1]
 
     pais_resposta = e_pais.get()
     capital_resposta = e_capital.get()
@@ -548,7 +547,7 @@ def confirmar():
 
     pais_answer = pais_resposta.upper().strip()
     pais_answer = " ".join(pais_answer.split())
-    if pais_answer in [local.upper() for local in respostas[pais_aleatorio][0]]:
+    if pais_answer in [local.upper() for local in respostas[pais_confirmacao][0]]:
 
         acerto += 1
         
@@ -566,13 +565,13 @@ def confirmar():
     capital_answer = capital_resposta.upper().strip().replace(' E ', ',').split(',')
     capital_answer = [capital.strip() for capital in capital_answer]
     capital_answer = [" ".join(capital.split()) for capital in capital_answer]
-    num_capitais = len(respostas[pais_aleatorio][1])
+    num_capitais = len(respostas[pais_confirmacao][1])
     acerto_capital = 0
     i=0
     j=0
     while(i<len(capital_answer)):
         while(j<num_capitais):
-            if capital_answer[i] in [local.upper() for local in respostas[pais_aleatorio][1][j]]:
+            if capital_answer[i] in [local.upper() for local in respostas[pais_confirmacao][1][j]]:
                 acerto_capital+=1
                 break
 
@@ -596,7 +595,7 @@ def confirmar():
 
     continente_answer = continente_resposta.upper().strip()
     continente_answer = " ".join(continente_answer.split())
-    if continente_answer in [local.upper() for local in respostas[pais_aleatorio][2]]:
+    if continente_answer in [local.upper() for local in respostas[pais_confirmacao][2]]:
 
         acerto += 1
         
@@ -612,7 +611,7 @@ def confirmar():
             erro_medio.pop(0)
 
     
-    string_capital = [info[0] for info in respostas[pais_aleatorio][1]]
+    string_capital = [info[0] for info in respostas[pais_confirmacao][1]]
     string_capital = ', '.join(string_capital)
     string_capital = string_capital[::-1].replace(", "[::-1], " e "[::-1], 1)[::-1]
     if acerto == 3:
@@ -626,14 +625,14 @@ def confirmar():
 
     elif acerto == 0:
 
-        lb_errado['text']=f"Respostas erradas! As respostas certas são {respostas[pais_aleatorio][0][0]}, {string_capital}, {respostas[pais_aleatorio][2][0]}."
+        lb_errado['text']=f"Respostas erradas! As respostas certas são {respostas[pais_confirmacao][0][0]}, {string_capital}, {respostas[pais_confirmacao][2][0]}."
         lb_errado.lift()
         
         pontuacao[-1]=0
 
     else:
 
-        lb_qcorreto['text']=f"Resposta quase certa! As respostas certas são {respostas[pais_aleatorio][0][0]}, {string_capital}, {respostas[pais_aleatorio][2][0]}."
+        lb_qcorreto['text']=f"Resposta quase certa! As respostas certas são {respostas[pais_confirmacao][0][0]}, {string_capital}, {respostas[pais_confirmacao][2][0]}."
         lb_qcorreto.lift()
 
         pontuacao[-1]=0
