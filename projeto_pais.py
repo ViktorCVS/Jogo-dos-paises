@@ -23,7 +23,6 @@ pais_passado = ''
 gerador = np.random.default_rng()
 
 status_seq = True
-#change_region = False
 
 rL = {'Brasil':27,'as':13,'ac':23,'an':4,'af':56,'eu':60,'oc':18,'aa':54}
 
@@ -42,7 +41,7 @@ try:
     with open('pref.pkl', 'rb') as f:
         pref=pickle.load(f)
 except:
-    pref = [[1,1,0,0,'Bandeira e Local','Aleatório'],[0,1,1,1,1,1,1,1]]
+    pref = [[1,1,0,0,0,'Bandeira e Local','Aleatório'],[0,1,1,1,1,1,1,1]]
     with open('pref.pkl', 'wb') as f:
         pickle.dump(pref,f)
 
@@ -58,8 +57,7 @@ pont_media = []
 erro_medio = []
 
 def on_config_change(*args):
-    pref = [[var_independente.get(),var_fantasmas.get(),var_salvar.get(),var_embar.get(),cbb_modo.get(),cbb_tipo.get()],
-            [var_brasil.get(),var_am_sul.get(),var_am_central.get(),var_am_norte.get(),var_africa.get(),var_europa.get(),var_oceania.get(),var_asia.get()]]
+    pref[0] = [var_independente.get(),var_fantasmas.get(),var_salvar.get(),var_embar.get(),var_continente.get(),cbb_modo.get(),cbb_tipo.get()]
     with open('pref.pkl', 'wb') as f:
         pickle.dump(pref,f)
 
@@ -70,8 +68,7 @@ def on_menu_change(*args):
     status_seq = True
     control = 0
     control_2 = 0
-    pref = [[var_independente.get(),var_fantasmas.get(),var_salvar.get(),var_embar.get(),cbb_modo.get(),cbb_tipo.get()],
-            [var_brasil.get(),var_am_sul.get(),var_am_central.get(),var_am_norte.get(),var_africa.get(),var_europa.get(),var_oceania.get(),var_asia.get()]]
+    pref[1] = [var_brasil.get(),var_am_sul.get(),var_am_central.get(),var_am_norte.get(),var_africa.get(),var_europa.get(),var_oceania.get(),var_asia.get()]
     with open('pref.pkl', 'wb') as f:
         pickle.dump(pref,f)
 
@@ -506,16 +503,26 @@ def pais_aleatorio_f():
 
     if regiao_aleatoria == 'Brasil':
 
-        lb_pergunta['text']="Qual é o estado, sua capital e sua região, respectivamente?"
+        if var_continente.get() == True:
+            lb_pergunta['text']="Qual é o estado e sua capital, respectivamente?"
+            lb_regiao['text']=''
+        else:
+            lb_pergunta['text']="Qual é o estado, sua capital e sua região, respectivamente?"
+            lb_regiao['text']='Região:'
+            
         lb_pais['text']='Estado:'
-        lb_regiao['text']='Região:'
         lb_pergunta.lift()
 
     else:
 
-        lb_pergunta['text']="Qual é o país, sua capital e seu continente, respectivamente?"
+        if var_continente.get() == True:
+            lb_pergunta['text']="Qual é o país e sua capital, respectivamente?"
+            lb_regiao['text']=''
+        else:
+            lb_pergunta['text']="Qual é o país, sua capital e seu continente, respectivamente?"
+            lb_regiao['text']='Continente:'
+            
         lb_pais['text']='País:'
-        lb_regiao['text']='Continente:'
         lb_pergunta.lift()
 
 
@@ -534,7 +541,6 @@ def confirmar():
     lb_errado['text']=''
     lb_pergunta['text']=''
 
-    #print(pais_aleatorio)
     pais_confirmacao = pais_aleatorio.split('.')[0]
     pais_confirmacao = pais_confirmacao.split('\\')[1]
 
@@ -612,6 +618,10 @@ def confirmar():
         erro_medio[-1]=erro_medio[-1]-0.15
         if(len(erro_medio)==241):
             erro_medio.pop(0)
+            
+    elif var_continente.get() == True:
+        
+        acerto += 1
 
     
     string_capital = [info[0] for info in respostas[pais_confirmacao][1]]
@@ -628,14 +638,20 @@ def confirmar():
 
     elif acerto == 0:
 
-        lb_errado['text']=f"Respostas erradas! As respostas certas são {respostas[pais_confirmacao][0][0]}, {string_capital}, {respostas[pais_confirmacao][2][0]}."
+        if var_continente.get() == True:
+            lb_errado['text']=f"Respostas erradas! As respostas certas são {respostas[pais_confirmacao][0][0]}, {string_capital}."
+        else:
+            lb_errado['text']=f"Respostas erradas! As respostas certas são {respostas[pais_confirmacao][0][0]}, {string_capital}, {respostas[pais_confirmacao][2][0]}."
         lb_errado.lift()
         
         pontuacao[-1]=0
 
     else:
 
-        lb_qcorreto['text']=f"Resposta quase certa! As respostas certas são {respostas[pais_confirmacao][0][0]}, {string_capital}, {respostas[pais_confirmacao][2][0]}."
+        if var_continente.get() == True:
+            lb_qcorreto['text']=f"Resposta quase certa! As respostas certas são {respostas[pais_confirmacao][0][0]}, {string_capital}."
+        else:
+            lb_qcorreto['text']=f"Resposta quase certa! As respostas certas são {respostas[pais_confirmacao][0][0]}, {string_capital}, {respostas[pais_confirmacao][2][0]}."
         lb_qcorreto.lift()
 
         pontuacao[-1]=0
@@ -764,7 +780,7 @@ if pref[1][7] == 1:
     cb_asia.select()
 var_asia.trace('w',on_menu_change)
 
-lb_versao = Label(tab_menu, text="V1.75")
+lb_versao = Label(tab_menu, text="V1.8")
 lb_versao.place(rely=1,x=1,y=-20)
 
 
@@ -838,36 +854,43 @@ if pref[0][3] == 1:
     cb_embar.select()
 var_embar.trace('w',on_config_change)
 
+var_continente=IntVar()
+cb_continente = Checkbutton(tab_configuracao, text='Omitir continente/região',variable=var_continente)
+cb_continente.place(relx=0.5,x=-120,y=6*pos)
+if pref[0][4] == 1:
+    cb_continente.select()
+var_continente.trace('w',on_config_change)
+
 cbb_modo = ttk.Combobox(tab_configuracao, values=["Bandeira e Local", "Bandeira apenas", "Local apenas"])
-cbb_modo.place(relx=0.5,x=-115,y=6*pos)
-if pref[0][4] == 'Bandeira e Local':
+cbb_modo.place(relx=0.5,x=-115,y=7*pos)
+if pref[0][5] == 'Bandeira e Local':
     cbb_modo.current(0)
-elif pref[0][4] == 'Bandeira apenas':
+elif pref[0][5] == 'Bandeira apenas':
     cbb_modo.current(1)
 else:
     cbb_modo.current(2)
 cbb_modo.bind("<<ComboboxSelected>>", lambda event: on_config_change())
 
 lb_configuracao = Label(tab_configuracao, text="Modo de jogo")
-lb_configuracao.place(relx=0.5,x=35,y=6*pos-2)
+lb_configuracao.place(relx=0.5,x=35,y=7*pos-2)
 
 cbb_tipo = ttk.Combobox(tab_configuracao, values=["Aleatório", "Sequencial"])
-cbb_tipo.place(relx=0.5,x=-115,y=7*pos)
-if pref[0][5] == 'Aleatório':
+cbb_tipo.place(relx=0.5,x=-115,y=8*pos)
+if pref[0][6] == 'Aleatório':
     cbb_tipo.current(0)
 else:
     cbb_tipo.current(1)
 cbb_tipo.bind("<<ComboboxSelected>>", lambda event: on_config_change())
 
 lb_configuracao = Label(tab_configuracao, text="Tipo de jogo")
-lb_configuracao.place(relx=0.5,x=35,y=7*pos-2)
+lb_configuracao.place(relx=0.5,x=35,y=8*pos-2)
 
 cbb_idioma = ttk.Combobox(tab_configuracao, values=["Brasileiro"])
-cbb_idioma.place(relx=0.5,x=-115,y=8*pos)
+cbb_idioma.place(relx=0.5,x=-115,y=9*pos)
 cbb_idioma.current(0)
 
 lb_config_idioma = Label(tab_configuracao, text="Idioma")
-lb_config_idioma.place(relx=0.5,x=35,y=8*pos)
+lb_config_idioma.place(relx=0.5,x=35,y=9*pos)
 
 
 def nova_pos(event):
@@ -887,7 +910,11 @@ def nova_pos(event):
 
             lb_loc.place(x=(janela.winfo_width()-lb_loc.winfo_reqwidth())/2,y=100)
 
-        e_continente.place(x=(janela.winfo_width()-e_pais.winfo_reqwidth())/2,y=580+40)
+        if var_continente.get():
+            e_continente.place_forget()
+        else:
+            e_continente.place(x=(janela.winfo_width()-e_pais.winfo_reqwidth())/2,y=580+40)
+            
         e_capital.place(x=(janela.winfo_width()-e_pais.winfo_reqwidth())/2,y=480+50+40)
         e_pais.place(x=(janela.winfo_width()-e_pais.winfo_reqwidth())/2,y=480+40)
         
